@@ -1,0 +1,2 @@
+# gosample
+- go sample file
