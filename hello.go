@@ -22,6 +22,21 @@ func main() {
 	// Image
 	m := Image{}
 	fmt.Printf(m.Bounds().String())
+
+	// Channel
+	c := make(chan int, 10)
+	Send(c)
+	for i := range c {
+		fmt.Println(i)
+	}
+
+	//ch := make(chan int)
+	//q  := make(chan int)
+	//for i := 0; i < 10; i++ {
+	//	ch <- i
+	//}
+	//q <- 0
+	//SendSelect(ch,q)
 }
 
 /**
@@ -78,4 +93,26 @@ func (im *Image) Bounds() image.Rectangle {
 
 func (im *Image) At(x, y int) color.Color {
 	return color.RGBA{uint8(x % 256), uint8(y % 256), 255, 255}
+}
+
+/**
+	Channel
+ */
+func Send(c chan int) {
+	for i := 0; i < 10; i++ {
+		c <- i
+	}
+	close(c)
+}
+
+func SendSelect(ch, q chan int) {
+	for {
+		select {
+		case ch <- 1:
+			fmt.Println("c")
+		case <- q:
+			fmt.Println("quit")
+			return
+		}
+	}
 }
