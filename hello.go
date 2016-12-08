@@ -12,8 +12,8 @@ import (
 func main() {
 	fmt.Printf("hello world!")
 
-	http.HandleFunc("/", handler)
-	http.ListenAndServe(":8080", nil)
+	//http.HandleFunc("/", handler)
+	//http.ListenAndServe(":8080", nil)
 
 	// Type
 	result := Sqrt(9.0)
@@ -30,13 +30,15 @@ func main() {
 		fmt.Println(i)
 	}
 
-	//ch := make(chan int)
-	//q  := make(chan int)
-	//for i := 0; i < 10; i++ {
-	//	ch <- i
-	//}
-	//q <- 0
-	//SendSelect(ch,q)
+	ch := make(chan int)
+	q  := make(chan int)
+	go func () {
+		for i := 0; i < 10; i++ {
+			ch <- i
+		}
+		q <- 0
+	}()
+	SendSelect(ch,q)
 }
 
 /**
@@ -108,7 +110,7 @@ func Send(c chan int) {
 func SendSelect(ch, q chan int) {
 	for {
 		select {
-		case ch <- 1:
+		case <- ch:
 			fmt.Println("c")
 		case <- q:
 			fmt.Println("quit")
