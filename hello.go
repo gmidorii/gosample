@@ -2,12 +2,14 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-	"math"
-	"image/color"
 	"image"
+	"image/color"
+	"math"
+	"net/http"
+	"strconv"
 )
 
+const s string = "CONST STRING"
 
 func main() {
 	fmt.Printf("hello world!")
@@ -31,35 +33,53 @@ func main() {
 	}
 
 	ch := make(chan int)
-	q  := make(chan int)
-	go func () {
+	q := make(chan int)
+	go func() {
 		for i := 0; i < 10; i++ {
 			ch <- i
 		}
 		q <- 0
 	}()
-	SendSelect(ch,q)
+	SendSelect(ch, q)
+
+	//const
+	fmt.Println(s)
+
+	//Closure
+	f := IntFunc(10)
+	fmt.Printf(strconv.Itoa(f()))
 }
 
 /**
-	Handler
- */
+Closure
+*/
+func IntFunc(i int) func() int {
+	return func() int {
+		return i
+	}
+}
+
+/**
+Handler
+*/
 func handler(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "hello world!")
 }
 
 /**
- 	Type Error
- */
+Type Error
+*/
 type ErrNegativeSqrt float64
 
 func (e *ErrNegativeSqrt) Error() string {
-	return fmt.Sprintf("cannot Sqrt negative number: %v", float64(*e));
+	return fmt.Sprintf("cannot Sqrt negative number: %v", float64(*e))
 }
 
 func (e *ErrNegativeSqrt) String() string {
 	return fmt.Sprintf("%v", *e)
 }
+
+// Sqrt
 func Sqrt(x ErrNegativeSqrt) ErrNegativeSqrt {
 	z := 1.0
 	zNew := 1.0
@@ -69,8 +89,8 @@ func Sqrt(x ErrNegativeSqrt) ErrNegativeSqrt {
 	}
 	for {
 		z = zNew
-		zNew = z - ((z * z - float64(x)) / (2 * z))
-		if math.Abs(zNew - z) < 1.0e-6 {
+		zNew = z - ((z*z - float64(x)) / (2 * z))
+		if math.Abs(zNew-z) < 1.0e-6 {
 			break
 		}
 	}
@@ -78,9 +98,9 @@ func Sqrt(x ErrNegativeSqrt) ErrNegativeSqrt {
 }
 
 /**
-	Image
- */
-type Image struct {}
+Image
+*/
+type Image struct{}
 
 func (im *Image) ColorModel() color.Model {
 	return color.RGBAModel
@@ -98,8 +118,8 @@ func (im *Image) At(x, y int) color.Color {
 }
 
 /**
-	Channel
- */
+Channel
+*/
 func Send(c chan int) {
 	for i := 0; i < 10; i++ {
 		c <- i
@@ -110,9 +130,9 @@ func Send(c chan int) {
 func SendSelect(ch, q chan int) {
 	for {
 		select {
-		case <- ch:
+		case <-ch:
 			fmt.Println("c")
-		case <- q:
+		case <-q:
 			fmt.Println("quit")
 			return
 		}
