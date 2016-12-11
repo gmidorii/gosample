@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"image"
 	"image/color"
+	//"io/ioutil"
 	"math"
 	"net/http"
+	"os"
 	"strconv"
 )
 
@@ -52,6 +54,11 @@ func main() {
 	//Interface
 	rect := rect{10.0, 20.0}
 	printGeo(rect)
+
+	//File
+	fmt.Println(os.Getwd())
+	//content := []byte("hello write\n")
+	//ioutil.WriteFile("/tmp/file", content, os.ModePerm)
 }
 
 /**
