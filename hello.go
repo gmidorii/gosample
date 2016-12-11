@@ -48,6 +48,30 @@ func main() {
 	//Closure
 	f := IntFunc(10)
 	fmt.Printf(strconv.Itoa(f()))
+
+	//Interface
+	rect := rect{10.0, 20.0}
+	printGeo(rect)
+}
+
+/**
+Interface
+*/
+type geometry interface {
+	area() float64
+}
+
+type rect struct {
+	width, height float64
+}
+
+func (r rect) area() float64 {
+	return r.width * r.height
+}
+
+func printGeo(g geometry) {
+	fmt.Println(g)
+	fmt.Println(g.area())
 }
 
 /**
