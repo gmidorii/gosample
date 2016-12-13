@@ -1,5 +1,5 @@
 .idea
 sample.iml
 vendor
-.swp
+*.swp
 

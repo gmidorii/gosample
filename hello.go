@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	//"io/ioutil"
+	"io/ioutil"
 	"math"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -56,9 +57,25 @@ func main() {
 	printGeo(rect)
 
 	//File
-	fmt.Println(os.Getwd())
-	//content := []byte("hello write\n")
-	//ioutil.WriteFile("/tmp/file", content, os.ModePerm)
+	cwd, err := os.Getwd()
+	if err != nil {
+	}
+
+	dirname := filepath.Join(cwd, "file")
+	er := os.MkdirAll(dirname, 0755)
+	if er != nil {
+	}
+	defer os.RemoveAll(dirname)
+
+	file, err := os.Create(dirname)
+	if err != nil {
+	}
+	defer file.Close()
+	filename := filepath.Join(dirname, "text")
+	content := []byte("hello write\n")
+	//file.Write(content)
+	ioutil.WriteFile(filename, content, 0644)
+	//ioutil.WriteFile(filename, content, os.ModePerm)
 }
 
 /**
