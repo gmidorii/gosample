@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/color"
 	"io/ioutil"
+	"log"
 	"math"
 	"net/http"
 	"os"
@@ -59,23 +60,19 @@ func main() {
 	//File
 	cwd, err := os.Getwd()
 	if err != nil {
+		log.Fatal(err)
 	}
 
 	dirname := filepath.Join(cwd, "file")
-	er := os.MkdirAll(dirname, 0755)
-	if er != nil {
-	}
-	defer os.RemoveAll(dirname)
-
-	file, err := os.Create(dirname)
+	err = os.Mkdir(dirname, 0775)
 	if err != nil {
+		log.Fatal(err)
 	}
-	defer file.Close()
-	filename := filepath.Join(dirname, "text")
+	defer os.Remove(dirname)
+
+	filename := filepath.Join(dirname, "tex.md")
 	content := []byte("hello write\n")
-	//file.Write(content)
 	ioutil.WriteFile(filename, content, 0644)
-	//ioutil.WriteFile(filename, content, os.ModePerm)
 }
 
 /**
