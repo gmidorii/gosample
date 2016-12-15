@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"image"
 	"image/color"
@@ -64,15 +65,32 @@ func main() {
 	}
 
 	dirname := filepath.Join(cwd, "file")
-	err = os.Mkdir(dirname, 0775)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer os.Remove(dirname)
+	//err = os.Mkdir(dirname, 0775)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//defer os.Remove(dirname)
 
 	filename := filepath.Join(dirname, "tex.md")
 	content := []byte("hello write\n")
 	ioutil.WriteFile(filename, content, 0644)
+
+	// Error
+	if num, err := ErrorFunc(10); err != nil {
+		log.Fatal(err)
+	} else {
+		fmt.Println(num)
+	}
+}
+
+/**
+Error
+*/
+func ErrorFunc(num int) (int, error) {
+	if num == 10 {
+		return num, errors.New("10 is error!")
+	}
+	return num, nil
 }
 
 /**
