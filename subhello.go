@@ -5,6 +5,11 @@ import (
 	"fmt"
 )
 
+type Test struct {
+	num int
+	str string
+}
+
 func main() {
 	/*
 	1. parallel exec
@@ -19,7 +24,7 @@ func main() {
 	chanSum(slice)
 
 	/*
-	map
+	2. map
 	 */
 	var value string
 	var ok bool
@@ -30,6 +35,28 @@ func main() {
 	// true
 	value, ok = tMap["2"]
 	existPrint(ok, value)
+	// %v is almost all format
+	fmt.Printf("%v\n", tMap)
+
+	/*
+	3. String()
+	 */
+	t := Test{num: 1, str:"TEST"}
+	fmt.Printf("%v", t)
+
+	/*
+	4. array append
+	 */
+	x := []int{1, 2, 3}
+	y := []int{4, 5, 6}
+	x = append(x, y...) // "..." is necessary
+	fmt.Println(x)
+}
+
+// String return format string
+// caution: Type *Test is wrong -> Type Test is correct
+func (t Test) String() string {
+	return fmt.Sprintf("num: %d\nstring: %s\n", t.num, t.str)
 }
 
 func existPrint(ok bool, value string) {
