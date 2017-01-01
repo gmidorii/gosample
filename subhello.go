@@ -1,7 +1,10 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"log"
+	"net/http"
 	"time"
 )
 
@@ -9,6 +12,12 @@ type Test struct {
 	num int
 	str string
 }
+
+type Counter struct {
+	num int
+}
+
+var addr = flag.String("addr", ":1718", "http service address")
 
 func main() {
 	/*
@@ -61,12 +70,27 @@ func main() {
 	} else {
 		fmt.Println("value is not string")
 	}
+
+	/*
+		6. net/http interface
+	*/
+	ctr := new(Counter)
+	http.Handle("/counter", ctr)
+	err := http.ListenAndServe(*addr, nil)
+	if err != nil {
+		log.Fatal("http error")
+	}
 }
 
 // String return format string
 // caution: Type *Test is wrong -> Type Test is correct
 func (t Test) String() string {
 	return fmt.Sprintf("num: %d\nstring: %s\n", t.num, t.str)
+}
+
+func (c *Counter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	c.num++
+	fmt.Fprintf(w, "count: %d", c.num)
 }
 
 func existPrint(ok bool, value string) {
