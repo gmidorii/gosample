@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -76,6 +77,7 @@ func main() {
 	*/
 	ctr := new(Counter)
 	http.Handle("/counter", ctr)
+	http.Handle("/arg", http.HandlerFunc(ArgServer))
 	err := http.ListenAndServe(*addr, nil)
 	if err != nil {
 		log.Fatal("http error")
@@ -91,6 +93,12 @@ func (t Test) String() string {
 func (c *Counter) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	c.num++
 	fmt.Fprintf(w, "count: %d", c.num)
+}
+
+// ArgServer is HandlerFunction
+// usage http.HandlerFunc(ArgServer)
+func ArgServer(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprintln(w, os.Args)
 }
 
 func existPrint(ok bool, value string) {
