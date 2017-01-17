@@ -47,3 +47,6 @@ function peco-src() {
 zle -N peco-src
 ```
 short cut `Ctr + ]`
+
+#### Quote
+技術評論社 "みんなのGo言語"
